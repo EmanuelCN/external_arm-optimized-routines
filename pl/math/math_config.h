@@ -467,6 +467,15 @@ extern const struct log1pf_data
   float coeffs[LOG1PF_NCOEFFS];
 } __log1pf_data HIDDEN;
 
+#define TANF_P_POLY_NCOEFFS 7
+/* cotan approach needs order 3 on [0, pi/4] to reach <3.5ulps.  */
+#define TANF_Q_POLY_NCOEFFS 4
+extern const struct tanf_poly_data
+{
+  float poly_tan[TANF_P_POLY_NCOEFFS];
+  float poly_cotan[TANF_Q_POLY_NCOEFFS];
+} __tanf_poly_data HIDDEN;
+
 #define V_LOG2F_TABLE_BITS 4
 #define V_LOG2F_POLY_ORDER 4
 extern const struct v_log2f_data
@@ -480,7 +489,7 @@ extern const struct v_log2f_data
 } __v_log2f_data HIDDEN;
 
 #define V_LOG2_TABLE_BITS 7
-#define V_LOG2_POLY_ORDER 7
+#define V_LOG2_POLY_ORDER 6
 extern const struct v_log2_data
 {
   double poly[V_LOG2_POLY_ORDER - 1];
@@ -495,5 +504,53 @@ extern const struct sv_sinf_data
 {
   float coeffs[V_SINF_NCOEFFS];
 } __sv_sinf_data HIDDEN;
+
+#define V_LOG10_TABLE_BITS 7
+#define V_LOG10_POLY_ORDER 6
+extern const struct v_log10_data
+{
+  struct
+  {
+    double invc, log10c;
+  } tab[1 << V_LOG10_TABLE_BITS];
+  double poly[V_LOG10_POLY_ORDER - 1];
+  double invln10, log10_2;
+} __v_log10_data HIDDEN;
+
+#define V_LOG10F_POLY_ORDER 9
+extern const float __v_log10f_poly[V_LOG10F_POLY_ORDER - 1] HIDDEN;
+
+#define SV_LOGF_POLY_ORDER 8
+extern const float __sv_logf_poly[SV_LOGF_POLY_ORDER - 1] HIDDEN;
+
+#define SV_LOG_POLY_ORDER 6
+#define SV_LOG_TABLE_BITS 7
+extern const struct sv_log_data
+{
+  double invc[1 << SV_LOG_TABLE_BITS];
+  double logc[1 << SV_LOG_TABLE_BITS];
+  double poly[SV_LOG_POLY_ORDER - 1];
+} __sv_log_data HIDDEN;
+
+#ifndef SV_EXPF_USE_FEXPA
+#define SV_EXPF_USE_FEXPA 0
+#endif
+#define SV_EXPF_POLY_ORDER 6
+extern const float __sv_expf_poly[SV_EXPF_POLY_ORDER - 1] HIDDEN;
+
+#define EXPM1F_POLY_ORDER 5
+extern const float __expm1f_poly[EXPM1F_POLY_ORDER] HIDDEN;
+
+#define EXPF_TABLE_BITS 5
+#define EXPF_POLY_ORDER 3
+extern const struct expf_data
+{
+  uint64_t tab[1 << EXPF_TABLE_BITS];
+  double invln2_scaled;
+  double poly_scaled[EXPF_POLY_ORDER];
+} __expf_data HIDDEN;
+
+#define EXPM1_POLY_ORDER 11
+extern const double __expm1_poly[EXPM1_POLY_ORDER] HIDDEN;
 
 #endif
